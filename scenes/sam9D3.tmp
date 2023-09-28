@@ -1,0 +1,51 @@
+[gd_scene load_steps=8 format=3 uid="uid://botsb34ueol81"]
+
+[ext_resource type="PackedScene" uid="uid://cvv78ltvbqscp" path="res://Prefabs/male_human.tscn" id="2_aaor8"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ftaqg"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_5sdar"]
+sky_material = SubResource("ProceduralSkyMaterial_ftaqg")
+
+[sub_resource type="Environment" id="Environment_le6x8"]
+background_mode = 2
+sky = SubResource("Sky_5sdar")
+tonemap_mode = 2
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_5p3pr"]
+
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_eklds"]
+
+[sub_resource type="ConcavePolygonShape3D" id="ConcavePolygonShape3D_yptad"]
+data = PackedVector3Array(1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, 1, -1, 0, -1, 1, 0, -1)
+
+[node name="Node3D" type="Node3D"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_le6x8")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
+shadow_enabled = true
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.830984, 0.556296, 0, -0.556296, 0.830984, 0, 10.2508, 18.9981)
+
+[node name="character" parent="." instance=ExtResource("2_aaor8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.67963, -1.19623)
+slide_on_ceiling = false
+wall_min_slide_angle = 0.785398
+platform_on_leave = 2
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+transform = Transform3D(31.354, 0, 0, 0, 1, 0, 0, 0, 29.8915, 0, 0, 0)
+layers = 1023
+mesh = SubResource("PlaneMesh_5p3pr")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="MeshInstance3D"]
+physics_material_override = SubResource("PhysicsMaterial_eklds")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="MeshInstance3D/StaticBody3D"]
+shape = SubResource("ConcavePolygonShape3D_yptad")
