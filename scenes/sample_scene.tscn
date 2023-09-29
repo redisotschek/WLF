@@ -1,35 +1,55 @@
-[gd_scene load_steps=6 format=3 uid="uid://botsb34ueol81"]
+[gd_scene load_steps=7 format=3 uid="uid://botsb34ueol81"]
 
 [ext_resource type="PackedScene" uid="uid://3811822ouj3k" path="res://scenes/protohuman.tscn" id="2_eibqp"]
 [ext_resource type="PackedScene" uid="uid://c8lb123k2n2va" path="res://Prefabs/test_level.tscn" id="2_qkr3h"]
+[ext_resource type="Script" path="res://scenes/RTS_camera.gd" id="3_hoil4"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ftaqg"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_uv0ae"]
+ground_bottom_color = Color(0.101961, 0.109804, 0.12549, 1)
+ground_horizon_color = Color(0.337255, 0.364706, 0.486275, 1)
+ground_curve = 0.0151571
 
-[sub_resource type="Sky" id="Sky_5sdar"]
-sky_material = SubResource("ProceduralSkyMaterial_ftaqg")
+[sub_resource type="Sky" id="Sky_emjkg"]
+sky_material = SubResource("ProceduralSkyMaterial_uv0ae")
 
-[sub_resource type="Environment" id="Environment_le6x8"]
+[sub_resource type="Environment" id="Environment_sidrd"]
 background_mode = 2
-sky = SubResource("Sky_5sdar")
+sky = SubResource("Sky_emjkg")
+ambient_light_color = Color(0.380392, 0.396078, 0.443137, 1)
+ambient_light_sky_contribution = 0.0
 tonemap_mode = 2
+sdfgi_enabled = true
+volumetric_fog_enabled = true
+volumetric_fog_density = 0.234
 
 [node name="Node3D" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_le6x8")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 71.8531, 0)
-shadow_enabled = true
+environment = SubResource("Environment_sidrd")
 
 [node name="test_level" parent="." instance=ExtResource("2_qkr3h")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0618593, 0.324725, -0.0224183)
 
 [node name="protohuman_male-n_it3" parent="." instance=ExtResource("2_eibqp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.07422, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.463045, 0)
 
-[node name="Camera3D" type="Camera3D" parent="." groups=["Camera"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.401492, 1.68668, 8.0965)
+[node name="camera_base" type="Node3D" parent="."]
+transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 6.038, 7, 3.559)
+script = ExtResource("3_hoil4")
+camera_move_speed = 5.0
+
+[node name="camera_socket" type="Node3D" parent="camera_base"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, 0)
+
+[node name="Camera3D" type="Camera3D" parent="camera_base/camera_socket" groups=["Camera"]]
+transform = Transform3D(1, 2.98023e-08, -2.98023e-08, 0, 0.707107, 0.707107, 2.98023e-08, -0.707107, 0.707107, 0, -7, 0)
 current = true
+fov = 55.0
+
+[node name="Lights" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="Lights"]
+transform = Transform3D(-0.00749418, -0.681001, 0.732244, 0.0707798, 0.730067, 0.6797, -0.997464, 0.0569219, 0.0427298, 6.79383, 5.60671, -0.00405502)
+light_color = Color(0.372549, 0.372549, 0.372549, 1)
+light_energy = 2.354
+light_angular_distance = 17.16
