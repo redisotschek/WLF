@@ -28,4 +28,4 @@ shadow_enabled = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.062, 0, -0.022)
 
 [node name="protohuman_male-n_it3" parent="." instance=ExtResource("2_eibqp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.619158, 10.1296, -2.79469)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.619158, 3.07422, -1.18738)

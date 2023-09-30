@@ -22,7 +22,6 @@ func _input(event):
 		var from = camera.project_ray_origin(mousePos)
 		var to = from + camera.project_ray_normal(mousePos) * rayLength
 		var space = get_world_3d().direct_space_state
-		var map = get_world_3d().navigation_map
 		var rayQuery = PhysicsRayQueryParameters3D.new()
 		rayQuery.from = from
 		rayQuery.to = to
@@ -43,8 +42,8 @@ func _physics_process(delta):
 
 func faceDirection():
 	var finalPos = navigation_agent.get_final_position()
-	var direction = global_position.direction_to(finalPos)
-	look_at(Vector3(direction.x, global_position.y, direction.z), Vector3.UP, true)
+	var direction = global_position.direction_to(finalPos) -  - PI/2
+	look_at(Vector3(direction.x, global_position.y, direction.z), Vector3.UP)
 
 func moveToPoint(delta, speed):
 	var targetPosition = navigation_agent.get_next_path_position()
@@ -58,7 +57,7 @@ func moveToPoint(delta, speed):
 		
 "
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5v38f"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_qrov6"]
 
 [node name="protohuman_male-n_it3" instance=ExtResource("1_hp8fj")]
 script = SubResource("GDScript_ogchf")
@@ -247,7 +246,7 @@ target_desired_distance = 0.1
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
-shape = SubResource("CapsuleShape3D_5v38f")
+shape = SubResource("CylinderShape3D_qrov6")
 
 [node name="Camera3D" type="Camera3D" parent="." index="3" groups=["Camera"]]
 transform = Transform3D(-0.892224, 0.258643, -0.370191, -5.00699e-08, 0.819742, 0.572733, 0.451594, 0.511006, -0.731393, -3.3899, 6.49282, -6.26366)

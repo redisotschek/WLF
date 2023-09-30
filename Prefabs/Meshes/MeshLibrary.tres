@@ -1,0 +1,19 @@
+[gd_resource type="MeshLibrary" load_steps=4 format=3 uid="uid://l4ketbh4gw8a"]
+
+[ext_resource type="PlaneMesh" uid="uid://dvv8xlvt55aiv" path="res://Prefabs/Meshes/PlaneQuad.tres" id="1_12dcj"]
+
+[sub_resource type="NavigationMesh" id="NavigationMesh_cqtg5"]
+cell_size = 1.0
+cell_height = 0.2
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e36q4"]
+margin = 0.0
+
+[resource]
+item/0/name = "Plane"
+item/0/mesh = ExtResource("1_12dcj")
+item/0/mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/shapes = [SubResource("BoxShape3D_e36q4"), Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)]
+item/0/navigation_mesh = SubResource("NavigationMesh_cqtg5")
+item/0/navigation_mesh_transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+item/0/navigation_layers = 1
