@@ -1,31 +1,30 @@
-[gd_scene load_steps=6 format=3 uid="uid://botsb34ueol81"]
+[gd_scene load_steps=6 format=3 uid="uid://dkhu0qtnyomxy"]
 
 [ext_resource type="PackedScene" uid="uid://3811822ouj3k" path="res://scenes/protohuman.tscn" id="2_eibqp"]
 [ext_resource type="PackedScene" uid="uid://c8lb123k2n2va" path="res://Prefabs/test_level.tscn" id="2_qkr3h"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_ftaqg"]
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_sgaom"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
 
-[sub_resource type="Sky" id="Sky_5sdar"]
-sky_material = SubResource("ProceduralSkyMaterial_ftaqg")
+[sub_resource type="Sky" id="Sky_xujmb"]
+sky_material = SubResource("ProceduralSkyMaterial_sgaom")
 
-[sub_resource type="Environment" id="Environment_le6x8"]
+[sub_resource type="Environment" id="Environment_etcu6"]
 background_mode = 2
-sky = SubResource("Sky_5sdar")
+sky = SubResource("Sky_xujmb")
 tonemap_mode = 2
 
-[node name="Node3D" type="Node3D"]
+[node name="sample_scene" type="Node3D"]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_le6x8")
+environment = SubResource("Environment_etcu6")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866024, -0.433016, 0.250001, 0, 0.499998, 0.866026, -0.500003, 0.749999, -0.43301, 0, 71.8531, 0)
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
 shadow_enabled = true
 
-[node name="test_level" parent="." instance=ExtResource("2_qkr3h")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.062, 0, -0.022)
+[node name="SceneRoot" parent="." instance=ExtResource("2_qkr3h")]
 
 [node name="protohuman_male-n_it3" parent="." instance=ExtResource("2_eibqp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.619158, 10.1296, -2.79469)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
