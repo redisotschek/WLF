@@ -1,13 +1,7 @@
-[gd_scene load_steps=5 format=3 uid="uid://dkhu0qtnyomxy"]
+extends Node3D
 
-[ext_resource type="PackedScene" uid="uid://3811822ouj3k" path="res://scenes/protohuman.tscn" id="2_eibqp"]
-[ext_resource type="PackedScene" uid="uid://c8lb123k2n2va" path="res://Prefabs/test_level.tscn" id="2_qkr3h"]
-
-[sub_resource type="GDScript" id="GDScript_mwf56"]
-script/source = "extends Node3D
-
-@onready var units = get_tree().get_nodes_in_group(\"Units\")
-@onready var gridmap = get_tree().get_nodes_in_group(\"Gridmap\")[0]
+@onready var units = get_tree().get_nodes_in_group("Units")
+@onready var gridmap = get_tree().get_nodes_in_group("Gridmap")[0]
 var astar = AStar3D.new()
 var grid: Dictionary = {}
 var cell_size = 1
@@ -17,7 +11,10 @@ const DIRECTIONS = [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vecto
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	var cells = gridmap.get_used_cells()
+	print(cell_size)
 	for cell in cells:
+		cell.x -= cell_size / 2
+		cell.z -= cell_size / 2
 		grid[v3_to_index(cell)] = cell
 	add_points()
 	connect_all_points()
@@ -59,11 +56,12 @@ func world_to_grid(_pos: Vector3) -> Vector3:
 	return floor(_pos / cell_size)
 
 func v3_to_index(v3: Vector3) -> String:
-	return str(int(round(v3.x))) + \",\" + str(int(round(v3.y))) + \",\" + str(int(round(v3.z)))
+	return str(int(round(v3.x))) + "," + str(int(round(v3.y))) + "," + str(int(round(v3.z)))
 
 func _input(event):
-	if Input.is_action_just_pressed(\"LeftMouse\"):
-		var camera = get_tree().get_nodes_in_group(\"Camera\")[0]
+	if Input.is_action_just_pressed("LeftMouse"):
+		
+		var camera = get_tree().get_nodes_in_group("Camera")[0]
 		var mouse_pos = get_viewport().get_mouse_position()
 		var rayLength = 100
 		var from = camera.project_ray_origin(mouse_pos)
@@ -80,7 +78,6 @@ func _input(event):
 			var unitpos = astar.get_closest_point(active_unit.position)
 			var path = _get_path(active_unit.position, result.position)
 			active_unit.path = path
-			active_unit.move()
 
 func get_point_id(point: Vector3):
 	return astar.get_closest_point(grid_to_world(point))
@@ -98,38 +95,3 @@ func get_id_grid_pos(_id: int) -> Vector3:
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
 	pass
-"
-
-[sub_resource type="GDScript" id="GDScript_wnxj5"]
-script/source = "extends Camera3D
-
-var zoomSpeed: float = 0.05
-var zoomMin: float = 0.001
-var zoomMax: float = 2.0
-var dragSensitivity: float = 1.0
-
-func _input(event):
-	pass
-#	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
-#		position -= Vector3(-event.relative.x, 0, -event.relative.y) * dragSensitivity
-##	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
-##		rotation += Vector3(event.relative.x, event.relative.y, 0) * zoomSpeed
-#	if event is InputEventMouseButton:
-#		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-#			position.y -= zoomSpeed
-#		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-#			position.y += zoomSpeed
-"
-
-[node name="sample_scene" type="Node3D"]
-script = SubResource("GDScript_mwf56")
-
-[node name="protohuman_male-n_it3" parent="." groups=["Units"] instance=ExtResource("2_eibqp")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-
-[node name="Camera3D" type="Camera3D" parent="." groups=["Camera"]]
-transform = Transform3D(-2.18557e-08, 0.5, -0.866025, -3.78552e-08, 0.866025, 0.5, 1, 4.37114e-08, 1.77636e-15, -8.3899, 6.4928, -0.26366)
-current = true
-script = SubResource("GDScript_wnxj5")
-
-[node name="TestLevel" parent="." instance=ExtResource("2_qkr3h")]

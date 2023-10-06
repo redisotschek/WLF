@@ -3,7 +3,7 @@
 [ext_resource type="PackedScene" uid="uid://4phecuqxuvng" path="res://assets/Models/protohuman_male-n_it3.glb" id="1_hp8fj"]
 [ext_resource type="Script" path="res://scenes/protohuman.gd" id="2_lnooc"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t7r41"]
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_fkw38"]
 
 [node name="protohuman_male-n_it3" instance=ExtResource("1_hp8fj")]
 script = ExtResource("2_lnooc")
@@ -194,8 +194,8 @@ avoidance_enabled = true
 debug_enabled = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("CapsuleShape3D_t7r41")
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CylinderShape3D_fkw38")
 
 [connection signal="link_reached" from="Pathfinding" to="." method="_on_pathfinding_link_reached"]
 [connection signal="navigation_finished" from="Pathfinding" to="." method="_on_pathfinding_navigation_finished"]

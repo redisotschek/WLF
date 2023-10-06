@@ -1,9 +1,10 @@
 [gd_resource type="PlaneMesh" load_steps=2 format=3 uid="uid://dvv8xlvt55aiv"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mchk4"]
+albedo_color = Color(0.0901961, 0.141176, 1, 1)
 
 [resource]
 lightmap_size_hint = Vector2i(5, 5)
 material = SubResource("StandardMaterial3D_mchk4")
 uv2_padding = 0.0
-size = Vector2(1, 1)
+size = Vector2(0.8, 0.8)

@@ -18,7 +18,7 @@ const DIRECTIONS = [Vector3.UP, Vector3.DOWN, Vector3.LEFT, Vector3.RIGHT, Vecto
 func _ready():
 	var cells = gridmap.get_used_cells()
 	for cell in cells:
-		grid[v3_to_index(cell)] = cell
+		grid[v3_to_index(cell)] = global_position + cell
 	add_points()
 	connect_all_points()
 
@@ -80,7 +80,6 @@ func _input(event):
 			var unitpos = astar.get_closest_point(active_unit.position)
 			var path = _get_path(active_unit.position, result.position)
 			active_unit.path = path
-			active_unit.move()
 
 func get_point_id(point: Vector3):
 	return astar.get_closest_point(grid_to_world(point))

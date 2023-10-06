@@ -1,15 +1,69 @@
 [gd_scene load_steps=4 format=3 uid="uid://3811822ouj3k"]
 
 [ext_resource type="PackedScene" uid="uid://4phecuqxuvng" path="res://assets/Models/protohuman_male-n_it3.glb" id="1_hp8fj"]
-[ext_resource type="Script" path="res://scenes/protohuman.gd" id="2_lnooc"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_t7r41"]
+[sub_resource type="GDScript" id="GDScript_ogchf"]
+script/source = "extends CharacterBody3D
+
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+const CELL_SIZE = 1
+var path = []
+var pos: Vector3:
+	get:
+		return pos
+	set(value):
+		pos = value
+
+signal unitSelected
+
+# Get the gravity from the project settings to be synced with RigidBody nodes.
+var gravity = ProjectSettings.get_setting(\"physics/3d/default_gravity\")
+#
+#func _ready():
+#	pos = grid.worldToGrid(position)
+
+func _physics_process(delta):
+	if not is_on_floor():
+		velocity.y = 1
+		move_and_slide()
+	else: velocity.y = 0
+		
+	move(delta)
+
+func _on_input_event(viewport, event, shape_idx):
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.is_pressed():
+		emit_signal(\"unitSelected\", self)
+
+func move(delta):
+	if path.size() > 0:
+		if position.distance_to(path[0]) < 5:
+			pos = path[0]
+			position = path[0]
+			path.remove_at(0)
+		else:
+			pos = path[0]
+			position += (path[0] - position).normalized() * SPEED * delta
+
+#func moveToPoint(delta, speed):
+#	var targetPosition = navigation_agent.get_next_path_position()
+#	var direction = global_position.direction_to(targetPosition)
+#	look_at(Vector3(direction.x, global_position.y, direction.z), Vector3.UP, true)
+#
+#	velocity = direction * speed
+#
+#	move_and_slide()
+		
+"
+
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_5v38f"]
 
 [node name="protohuman_male-n_it3" instance=ExtResource("1_hp8fj")]
-script = ExtResource("2_lnooc")
+script = SubResource("GDScript_ogchf")
 
 [node name="Armature_001" parent="." index="0"]
-transform = Transform3D(0.90764, 0, 0, 0, 0.90764, 0, 0, 0, 0.90764, 0, 1, 0)
+transform = Transform3D(0.90764, 0, 0, 0, 0.90764, 0, 0, 0, 0.90764, 0.00179217, 1.02697, 0.0527061)
 
 [node name="Skeleton3D" parent="Armature_001" index="0"]
 bones/0/rotation = Quaternion(-0.00373222, 1.19208e-07, -4.44926e-10, 0.999993)
@@ -187,18 +241,9 @@ transform = Transform3D(1, -9.4369e-15, -1.97531e-12, 9.32587e-15, 1, 0, 2.00373
 bone_idx = 43
 
 [node name="Pathfinding" type="NavigationAgent3D" parent="." index="1"]
-path_desired_distance = 0.1
-target_desired_distance = 0.1
-path_max_distance = 0.01
 avoidance_enabled = true
 debug_enabled = true
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." index="2"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
-shape = SubResource("CapsuleShape3D_t7r41")
-
-[connection signal="link_reached" from="Pathfinding" to="." method="_on_pathfinding_link_reached"]
-[connection signal="navigation_finished" from="Pathfinding" to="." method="_on_pathfinding_navigation_finished"]
-[connection signal="path_changed" from="Pathfinding" to="." method="_on_pathfinding_path_changed"]
-[connection signal="target_reached" from="Pathfinding" to="." method="_on_pathfinding_target_reached"]
-[connection signal="waypoint_reached" from="Pathfinding" to="." method="_on_pathfinding_waypoint_reached"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_5v38f")

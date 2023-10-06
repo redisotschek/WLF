@@ -1,0 +1,38 @@
+[gd_scene load_steps=5 format=3 uid="uid://dkhu0qtnyomxy"]
+
+[ext_resource type="Script" path="res://scenes/sample_scene.gd" id="1_e2cpm"]
+[ext_resource type="PackedScene" uid="uid://3811822ouj3k" path="res://scenes/protohuman.tscn" id="2_eibqp"]
+[ext_resource type="PackedScene" uid="uid://c8lb123k2n2va" path="res://Prefabs/test_level.tscn" id="2_qkr3h"]
+
+[sub_resource type="GDScript" id="GDScript_wnxj5"]
+script/source = "extends Camera3D
+
+var zoomSpeed: float = 0.05
+var zoomMin: float = 0.001
+var zoomMax: float = 2.0
+var dragSensitivity: float = 1.0
+
+func _input(event):
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+		position -= Vector3(-event.relative.x, 0, -event.relative.y) * dragSensitivity
+#	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
+#		rotation += Vector3(event.relative.x, event.relative.y, 0) * zoomSpeed
+	if event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			position.y -= zoomSpeed
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			position.y += zoomSpeed
+"
+
+[node name="sample_scene" type="Node3D"]
+script = ExtResource("1_e2cpm")
+
+[node name="protohuman_male-n_it3" parent="." groups=["Units"] instance=ExtResource("2_eibqp")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, 0)
+
+[node name="Camera3D" type="Camera3D" parent="." groups=["Camera"]]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, -0.3899, 13.4928, -0.26366)
+current = true
+script = SubResource("GDScript_wnxj5")
+
+[node name="TestLevel" parent="." instance=ExtResource("2_qkr3h")]
