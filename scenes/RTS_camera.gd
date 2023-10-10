@@ -1,34 +1,53 @@
-extends Node3D
+extends Camera3D
 
-@export_range(0,100,1) var camera_move_speed:float = 20.0
-
-# flags
-var camera_can_process:bool = true
-var camera_can_move_base:bool = true
-
-
-# nodes
-@onready var camera_socket:Node3D = $camera_socket
-@onready var camera:Camera3D = $camera_socket/Camera3D
+var radius = 10
+var position_angle = 0
+var position_step = 45
+var speed = 2.0
+var height = 5
+@onready var unit_pos = get_tree().get_first_node_in_group("Units").position
+var POSITIONS = [0, 45, 90, 180]
+var curr_position_index = 0
+var is_moving = false
 
 func _ready():
-	pass 
-
-func _process(delta:float) -> void:
-	if !camera_can_process:return
-	camera_base_move(delta)
-
-func _unhandled_input(event:InputEvent) -> void:
-	pass
-
-func camera_base_move(delta:float) -> void:
-	if !camera_can_move_base:return
-	var velocity_direction:Vector3 = Vector3.ZERO
+	get_camera_position(POSITIONS[curr_position_index])
 	
-	if Input.is_action_pressed("camera_forward"): 	   velocity_direction -= transform.basis.z
-	if Input.is_action_pressed("camera_backward"): 	   velocity_direction += transform.basis.z
-	if Input.is_action_pressed("camera_right"): 	   velocity_direction += transform.basis.x
-	if Input.is_action_pressed("camera_left"): 	       velocity_direction -= transform.basis.x
+func _process(delta):
+	look_at(unit_pos)
 	
-	position += velocity_direction.normalized() * delta * camera_move_speed
-	
+func slide_camera(direction: bool):
+	print(direction)
+	var new_index
+	if direction:
+		new_index = curr_position_index + 1
+	else: new_index = curr_position_index - 1
+	if new_index < 0:
+		new_index = POSITIONS.size() - 1
+	elif new_index > POSITIONS.size() - 1:
+		new_index = 0
+	print("new index ", new_index)
+	curr_position_index = new_index
+#	var angle = Vector3(sin(d * speed) * radius, height, cos(d * speed) * radius)
+	get_camera_position(POSITIONS[curr_position_index])
+
+func get_camera_position(angle: int):
+	position = get_angle(angle) + Vector3(unit_pos.x, 0, unit_pos.z)
+	is_moving = false
+
+func get_angle(angle: int) -> Vector3:
+	return Vector3(sin(angle) * radius, height, cos(angle) * radius)
+
+func _input(event):
+#	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_RIGHT):
+#		position -= Vector3(-event.relative.x, 0, -event.relative.y) * dragSensitivity
+	if event is InputEventMouseMotion and Input.is_mouse_button_pressed(MOUSE_BUTTON_MIDDLE):
+		if is_moving: return
+		is_moving = true
+		slide_camera(event.relative.x > 0)
+#		rotation += Vector3(event.relative.x, event.relative.y, 0) * zoomSpeed
+#	if event is InputEventMouseButton:
+#		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+#			position.y -= zoomSpeed
+#		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+#			position.y += zoomSpeed
